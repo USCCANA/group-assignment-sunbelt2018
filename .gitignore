@@ -1,0 +1,9 @@
+*.doc*
+*.xls*
+*.rda
+*.RData
+*.rds
+.Rhistory
+
+packrat/lib*/
+.Rproj.user
