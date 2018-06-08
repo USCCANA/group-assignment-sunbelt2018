@@ -26,6 +26,7 @@ for (n in names(group_assignment_results)) {
     
     # G <- G + 1L
     G <- max(G) - G + 1
+    message("Starting group assignment algorithm in network ", n,"...", appendLF = FALSE)
     group_assignment_results[[n]][[i]] <- optimalAssignment(
       G,
       leaders      = dat_nleaders[i],
@@ -33,7 +34,7 @@ for (n in names(group_assignment_results)) {
       maxGroupSize = nrow(G)
     )
     
-    message("Network class ", n, " #", i, " done.")
+    message(" done.")
   }
   
 }
