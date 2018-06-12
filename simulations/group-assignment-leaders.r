@@ -1,7 +1,7 @@
 library(GroupAssignment)
 library(igraph)
 
-options(error = utils::dump.frames())
+source("utils.r") #options(error = utils::dump.frames())
 
 # Reading the data in
 dat_attributes <- readRDS("simulations/dat_attributes.rds")
@@ -9,19 +9,7 @@ dat_networks   <- readRDS("simulations/dat_networks.rds")
 dat_nleaders   <- readRDS("simulations/dat_nleaders.rds")
 
 ga <- function(...) {
-  on.exit(setTimeLimit())
-  # setTimeLimit(elapsed = 10)
-  ans <- tryCatch({
-      setTimeLimit(elapsed = 10, transient = TRUE)
-      optimalAssignment(...)
-    },
-    error = function(e) {
-    # message("Sorry, it took too long")
-    # NA
-    e
-  })
-  # setTimeLimit()
-  ans
+  eval_with_timeout(optimalAssignment(...), timeout = 5*60)
 }
 
 # Computing assignments
@@ -52,7 +40,9 @@ for (n in names(group_assignment_results)) {
       minGroupSize = 1,
       maxGroupSize = nrow(G)
     )
-    
+
+    saveRDS(group_assignment_results, file="simulations/group_assignment.rds", compress=FALSE)  
+
     message(" done.")
   }
   
