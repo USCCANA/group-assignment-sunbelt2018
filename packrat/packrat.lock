@@ -9,12 +9,12 @@ Version: 1.0.1
 GithubRepo: GroupAssignment
 GithubUsername: hkunda
 GithubRef: master
-GithubSha1: 1cf44eec2ceb95e938a2428acf1c4944edc70202
+GithubSha1: d950eb58a29b9fcacf511ea062e74a7faa810756
 RemoteHost: https://api.github.com
 RemoteRepo: GroupAssignment
 RemoteUsername: hkunda
-RemoteSha: 1cf44eec2ceb95e938a2428acf1c4944edc70202
-Hash: 9e4f71e856dc4426520bfcd4061b686e
+RemoteSha: d950eb58a29b9fcacf511ea062e74a7faa810756
+Hash: 2f02b2be86f66e4f9b59a949cd04da74
 Requires: Rcpp
 
 Package: MatchIt
@@ -184,17 +184,9 @@ Version: 1.0-8
 Hash: 09985635b09071a1d81d6811b92846ea
 
 Package: netdiffuseR
-Source: github
+Source: CRAN
 Version: 1.20.0
-GithubRepo: netdiffuseR
-GithubUsername: USCCANA
-GithubRef: master
-GithubSha1: 98bb31aaa8340d691ade549bd63bc1f54aa8b1dc
-RemoteHost: https://api.github.com
-RemoteRepo: netdiffuseR
-RemoteUsername: USCCANA
-RemoteSha: 98bb31aaa8340d691ade549bd63bc1f54aa8b1dc
-Hash: b8d35e7226fff9e5bd19a17ea1ae1ddc
+Hash: db45fa645b83adb7bf9b18df124ad930
 Requires: MatchIt, Rcpp, RcppArmadillo, SparseM, igraph, network,
     networkDynamic, sna, viridis
 
