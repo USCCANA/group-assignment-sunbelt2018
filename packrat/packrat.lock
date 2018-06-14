@@ -141,6 +141,12 @@ Version: 1.2.1
 Hash: a979d42385efda8e8aca7882a296ab50
 Requires: magrittr, pkgconfig
 
+Package: influenceR
+Source: CRAN
+Version: 0.1.0
+Hash: 74fa4b51bb8c4ee841f712d40dbf5f13
+Requires: igraph
+
 Package: jsonlite
 Source: CRAN
 Version: 1.5
