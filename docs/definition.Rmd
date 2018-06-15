@@ -1,0 +1,25 @@
+---
+title: "Group Assignment Problem"
+output: word_document
+---
+
+Let $G\equiv(V, E)$ be a graph composed of a set of $n$ vertices, and a set of $m$ edges. Now, for each $v\in V$ we have a ranking vector $R_v \subset V$ with is a partially ordered set of $v$'s preferences on a given issue, for example, popularity ranking, who $v$ is closest to, etc.
+
+We are interested on finding a mapping $L:V\mapsto V, L\in\mathcal{L}$ such that each individual in the network can be assigned to one of its peers in $V$, this is, a matching problem. You can think of this set a set of peer leaders that are assigned to individuals in the network.
+
+The objective function of this problem is defined in terms of each vertex cost function. For $v\in V$, the cost function is 
+
+$$
+C_v(w) = \left\{\begin{array}{ll}
+\mbox{Position index of $w$ in $R_v$} & \mbox{if $w$ is in $R_v$} \\
+K & \mbox{otherwise}
+\end{array}\right.
+$$
+
+Where $K$ is a fixed cost. Then, the optimal mapping $L^*$ is defined as follows:
+
+$$
+L^* = \arg\min_{L\in \mathcal{L}} \sum_{v\in V}C_v(L(v))
+$$
+
+Moreover, $\mathcal{L}$ can be constrained to the set of mappings in which there range is of size $l$, i.e., exactly $l$ peer leaders.
