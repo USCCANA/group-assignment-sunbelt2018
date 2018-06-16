@@ -20,7 +20,7 @@ for (i in seq_along(indegree_sf))
   indegree_sf[[i]] <- dat_attributes[[i]] %>%
   mutate(ord = 1:n()) %>%
   as_tibble %>%
-  arrange(indegree_scale_free, betweenness_scale_free) %>%
+  arrange(-indegree_scale_free, -betweenness_scale_free) %>%
   select(ord) %>%
   unclass %>%
   unlist %>%
@@ -36,7 +36,7 @@ for (i in seq_along(indegree_sw))
   indegree_sw[[i]] <- dat_attributes[[i]] %>%
   mutate(ord = 1:n()) %>%
   as_tibble %>%
-  arrange(indegree_small_world, betweenness_small_world) %>%
+  arrange(-indegree_small_world, -betweenness_small_world) %>%
   select(ord) %>%
   unclass %>%
   unlist %>%
@@ -52,7 +52,7 @@ for (i in seq_along(indegree_sf_h))
   indegree_sf_h[[i]] <- dat_attributes[[i]] %>%
   mutate(ord = 1:n()) %>%
   as_tibble %>%
-  arrange(indegree_sf_homophilic, betweenness_sf_homophilic) %>%
+  arrange(-indegree_sf_homophilic, -betweenness_sf_homophilic) %>%
   select(ord) %>%
   unclass %>%
   unlist %>%
@@ -61,9 +61,9 @@ for (i in seq_along(indegree_sf_h))
 
 saveRDS(
   list(
-    scale_free   = indegree_sf,
-    small_world  = indegree_sw,
-    sf_homphilic = indegree_sf_h
+    scale_free    = indegree_sf,
+    small_world   = indegree_sw,
+    sf_homophilic = indegree_sf_h
   ),
   file = "simulations/indegree.rds"
 )
