@@ -1,0 +1,11 @@
+---
+title: "Overlapping"
+author: "George G Vega Yon"
+date: "6/18/2018"
+output: word_document
+---
+
+```{r overlapping, echo=FALSE}
+knitr::kable(read.csv("../simulations/overlap.csv", row.names = 1), digits = 2, caption = "Jaccard Index between different leader selection algorithms: Each cell represents a 100 simulated networks with network size ranging between 20 and 50 individuals and selecting a random proportion of leaders ranging 5 to 20 percent of the network. The Scale-free homophilic network was built based on age using the `rgraph_ba` function as implemented in `netdiffuseR`.")
+```
+

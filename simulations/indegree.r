@@ -2,8 +2,6 @@ library(igraph)
 library(dplyr)
 library(magrittr)
 
-
-
 dat_attributes <- readRDS("simulations/dat_attributes.rds")
 dat_networks   <- readRDS("simulations/dat_networks.rds")
 dat_nleaders   <- readRDS("simulations/dat_nleaders.rds")

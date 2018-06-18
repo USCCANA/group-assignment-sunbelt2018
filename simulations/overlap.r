@@ -4,6 +4,9 @@ library(igraph)
 leaders_ga <- readRDS("simulations/group_assignment.rds")
 leaders_kp <- readRDS("simulations/keyplayer.rds")
 leaders_id <- readRDS("simulations/indegree.rds")
+leaders_mm <- readRDS("simulations/mentor_match.rds")
+leaders_gn <- readRDS("simulations/girvan_newman.rds")
+leaders_rg <- readRDS("simulations/random_groups.rds")
 
 dat_attributes <- readRDS("simulations/dat_attributes.rds")
 dat_networks   <- readRDS("simulations/dat_networks.rds")
@@ -37,44 +40,53 @@ jaccard <- function(a, b) {
   
 }
 
-# KP vs Indegree
-overlap_kp_id <- structure(vector("list", 3), names = names(dat_networks))
-for (n in names(overlap_kp_id)) {
+results <- ls(pattern = "leaders_[a-zA-Z0-9]+")
+combinations <- combn(results, 2, simplify = FALSE)
+
+for (g in combinations) {
   
-  overlap_kp_id[[n]] <- structure(vector("double", length(dat_nleaders)))
+  # Creating the output
+  ans <- structure(vector("list", 3), names = names(dat_networks))
+  for (n in names(ans)) {
+    
+    ans[[n]] <- structure(vector("double", length(dat_nleaders)))
+    
+    # Computing the jaccard index
+    for (i in seq_along(ans[[n]]))
+      ans[[n]][[i]] <- jaccard(get(g[1])[[n]][[i]],get(g[2])[[n]][[i]])
+    
+  }
   
-  for (i in seq_along(overlap_kp_id[[n]]))
-    overlap_kp_id[[n]][[i]] <- jaccard(leaders_kp[[n]][[i]],leaders_id[[n]][[i]])
+  # Saving the result
+  assign(
+    paste0(
+      "overlap_",
+      gsub("^leaders_", "", g[1]), "_",
+      gsub("^leaders_", "", g[2])
+      ),
+    ans,
+    envir = .GlobalEnv
+    )
   
 }
 
-# KP vs GA
-overlap_kp_ga <- structure(vector("list", 3), names = names(dat_networks))
-for (n in names(overlap_kp_ga)) {
-  
-  overlap_kp_ga[[n]] <- structure(vector("double", length(dat_nleaders)))
-  
-  for (i in seq_along(overlap_kp_ga[[n]]))
-    overlap_kp_ga[[n]][[i]] <- jaccard(leaders_kp[[n]][[i]],leaders_ga[[n]][[i]])
-  
-}
+# Computing means
+J <- lapply(mget(ls(pattern="^overlap")), sapply, mean, na.rm=TRUE) %>%
+  do.call(rbind, .)
 
-# Indegree vs GA
-overlap_id_ga <- structure(vector("list", 3), names = names(dat_networks))
-for (n in names(overlap_id_ga)) {
-  
-  overlap_id_ga[[n]] <- structure(vector("double", length(dat_nleaders)))
-  
-  for (i in seq_along(overlap_id_ga[[n]]))
-    overlap_id_ga[[n]][[i]] <- jaccard(leaders_id[[n]][[i]],leaders_ga[[n]][[i]])
-  
-}
+# Updating rownames
+rownames(J) <- gsub("overlap_([a-zA-Z]+)_([a-zA-Z]+)", "\\1 vs \\2", rownames(J)) %>%
+  toupper
 
-J <- rbind(
-  `KP vs GA`       = sapply(overlap_kp_ga, mean, na.rm = TRUE),
-  `KP vs Indegree` = sapply(overlap_kp_id, mean, na.rm = TRUE),
-  `Indegree vs GA` = sapply(overlap_id_ga, mean, na.rm = TRUE)
-)
+J <- J[order(-J[,1], -J[,2], -J[,3]),]
 
+rownames(J) <- gsub("ID", "Indegree", rownames(J))
+rownames(J) <- gsub("MM", "Mentor Matching", rownames(J))
+rownames(J) <- gsub("KP", "Key Players", rownames(J))
+rownames(J) <- gsub("GA", "Group Assignment", rownames(J))
+rownames(J) <- gsub("RG", "Random Groups", rownames(J))
+rownames(J) <- gsub("GN", "Girvan-Newman", rownames(J))
 
+# Writing the output
 write.csv(J, "simulations/overlap.csv")
+
