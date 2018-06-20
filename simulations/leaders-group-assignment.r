@@ -41,7 +41,7 @@ for (n in names(group_assignment_results)) {
       maxGroupSize = nrow(G)
     )
 
-    saveRDS(group_assignment_results, file="simulations/group_assignment.rds", compress=FALSE)  
+    saveRDS(group_assignment_results, file="simulations/leaders-group-assignment.rds", compress=FALSE)  
 
     message(" done.")
   }

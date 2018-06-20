@@ -31,7 +31,7 @@ for (n in names(keyplayer_results)) {
       maxsec = 5*60
     )
 
-    saveRDS(keyplayer_results, file="simulations/keyplayer.rds", compress=FALSE)  
+    saveRDS(keyplayer_results, file="simulations/leaders-keyplayer.rds", compress=FALSE)  
 
     message(" done.")
   }

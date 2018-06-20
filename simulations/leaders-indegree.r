@@ -63,5 +63,5 @@ saveRDS(
     small_world   = indegree_sw,
     sf_homophilic = indegree_sf_h
   ),
-  file = "simulations/indegree.rds"
+  file = "simulations/leaders-indegree.rds"
 )

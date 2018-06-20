@@ -1,12 +1,12 @@
 library(igraph)
 
 # Reading the data in
-leaders_ga <- readRDS("simulations/group_assignment.rds")
-leaders_kp <- readRDS("simulations/keyplayer.rds")
-leaders_id <- readRDS("simulations/indegree.rds")
-leaders_mm <- readRDS("simulations/mentor_match.rds")
-leaders_gn <- readRDS("simulations/girvan_newman.rds")
-leaders_rg <- readRDS("simulations/random_groups.rds")
+leaders_ga <- readRDS("simulations/leaders-group-assignment.rds")
+leaders_kp <- readRDS("simulations/leaders-keyplayer.rds")
+leaders_id <- readRDS("simulations/leaders-indegree.rds")
+leaders_mm <- readRDS("simulations/leaders-mentor-match.rds")
+leaders_gn <- readRDS("simulations/leaders-girvan-newman.rds")
+leaders_rg <- readRDS("simulations/leaders-random-groups.rds")
 
 dat_attributes <- readRDS("simulations/dat_attributes.rds")
 dat_networks   <- readRDS("simulations/dat_networks.rds")

@@ -1,6 +1,7 @@
 library(igraph)
 library(dplyr)
 library(magrittr)
+library(netdiffuseR)
 
 dat_attributes <- readRDS("simulations/dat_attributes.rds")
 dat_networks   <- readRDS("simulations/dat_networks.rds")
@@ -19,39 +20,34 @@ for (n in names(ans)) {
   
   for (i in seq_along(ans[[n]])) {
     
-    # Getting the membership
+    # Random groups assignment
     ans[[n]][[i]] <- suppressWarnings({
-      dat_networks[[n]][[i]] %>%
-        graph_from_adjacency_matrix %>% 
-        cluster_edge_betweenness %>% 
-        unclass %>% "[["("membership")
-    })
-      
+      matrix(1:dat_nleaders[i], nrow = nrow(dat_attributes[[i]]), ncol = 1) %>%
+      as.vector %>% sample})
+    
+    # Creating the data and sorting by indegree and betweenness
     ans[[n]][[i]] <- cbind(dat_attributes[[i]], mem = ans[[n]][[i]]) %>%
       mutate(id = 1:n()) 
     ans[[n]][[i]] <- ans[[n]][[i]][
       order(
         -ans[[n]][[i]][[paste0("indegree_", n)]],
         -ans[[n]][[i]][[paste0("betweenness_", n)]]
-        ),]
+      ),]
     
-    # How many leaders per group
-    nlead <- max(1, dat_nleaders[i] %/% length(unique(ans[[n]][[i]]$mem)))
-    
+    # Choosing the one with the highest indegree
     ans[[n]][[i]] <- ans[[n]][[i]] %>% 
       group_by(mem) %>%
-      filter(1:n() <= nlead) %>%
+      filter(1:n() <= 1) %>%
       ungroup %>%
       select(id)  %>% 
       unclass %>% unname %>% "[["(1)
     
   }
-    
   
   message("Network ", n, " done.")
 }
 
 saveRDS(
   ans,
-  file = "simulations/girvan_newman.rds"
+  file = "simulations/leaders-random-groups.rds"
 )
