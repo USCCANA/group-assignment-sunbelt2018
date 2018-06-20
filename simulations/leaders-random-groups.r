@@ -12,11 +12,14 @@ dat_nleaders   <- readRDS("simulations/dat_nleaders.rds")
 ans <- vector("list", length(dat_networks))
 names(ans) <- names(dat_networks)
 
+g_membership <- ans
+
 # Looping through networks
 set.seed(1)
 for (n in names(ans)) {
   
   ans[[n]] <- vector("list", length(dat_networks[[n]]))
+  g_membership[[n]] <- ans[[n]]
   
   for (i in seq_along(ans[[n]])) {
     
@@ -24,6 +27,10 @@ for (n in names(ans)) {
     ans[[n]][[i]] <- suppressWarnings({
       matrix(1:dat_nleaders[i], nrow = nrow(dat_attributes[[i]]), ncol = 1) %>%
       as.vector %>% sample})
+    
+    g_membership[[n]][[i]] <- ans[[n]][[i]] %>%
+      as.factor %>% 
+      as.integer
     
     # Creating the data and sorting by indegree and betweenness
     ans[[n]][[i]] <- cbind(dat_attributes[[i]], mem = ans[[n]][[i]]) %>%
@@ -50,4 +57,9 @@ for (n in names(ans)) {
 saveRDS(
   ans,
   file = "simulations/leaders-random-groups.rds"
+)
+
+saveRDS(
+  g_membership,
+  file = "simulations/leaders-membership-random-groups.rds"
 )

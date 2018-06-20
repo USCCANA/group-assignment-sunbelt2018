@@ -9,3 +9,21 @@ output: word_document
 knitr::kable(read.csv("../simulations/overlap.csv", row.names = 1), digits = 2, caption = "Jaccard Index between different leader selection algorithms: Each cell represents a 100 simulated networks with network size ranging between 20 and 50 individuals and selecting a random proportion of leaders ranging 5 to 20 percent of the network. The Scale-free homophilic network was built based on age using the `rgraph_ba` function as implemented in `netdiffuseR`.")
 ```
 
+
+```{r group-overlapping, echo=FALSE}
+knitr::kable(read.csv("../simulations/group-overlap.csv", row.names = 1), digits = 2, caption = "Normalized Hamming Distance between different leader selection algorithms groups: Each cell represents a 100 simulated networks with network size ranging between 20 and 50 individuals and selecting a random proportion of leaders ranging 5 to 20 percent of the network. The Scale-free homophilic network was built based on age using the `rgraph_ba` function as implemented in `netdiffuseR`.")
+```
+
+
+$$
+\mbox{Normalized Hamming Distance}(a,b) = \frac{\sum_{ij}|a_{ij} - b_{ij}|}{n(n-1)}
+$$
+
+Where the adjacency matrices $\{a, b\}$ are defined as individuals' group-co-membership:
+
+$$
+\{a_{ij}\} = \left\{\begin{array}{ll}
+1 & \text{if $\{i,j\}$ are in the same group} \\
+0 & \mbox{otherwise}
+\end{array}\right.
+$$

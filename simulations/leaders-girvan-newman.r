@@ -11,11 +11,16 @@ dat_nleaders   <- readRDS("simulations/dat_nleaders.rds")
 ans <- vector("list", length(dat_networks))
 names(ans) <- names(dat_networks)
 
+g_membership <- ans
+
 # Looping through networks
 set.seed(1)
 for (n in names(ans)) {
   
   ans[[n]] <- vector("list", length(dat_networks[[n]]))
+  
+  g_membership[[n]] <- ans[[n]]
+
   
   for (i in seq_along(ans[[n]])) {
     
@@ -29,6 +34,11 @@ for (n in names(ans)) {
       
     ans[[n]][[i]] <- cbind(dat_attributes[[i]], mem = ans[[n]][[i]]) %>%
       mutate(id = 1:n()) 
+    
+    g_membership[[n]][[i]] <- ans[[n]][[i]]$mem %>%
+      as.factor %>% 
+      as.integer
+
     ans[[n]][[i]] <- ans[[n]][[i]][
       order(
         -ans[[n]][[i]][[paste0("indegree_", n)]],
@@ -46,12 +56,18 @@ for (n in names(ans)) {
       unclass %>% unname %>% "[["(1)
     
   }
-    
-  
-  message("Network ", n, " done.")
+
+
+message("Network ", n, " done.")
 }
 
 saveRDS(
   ans,
   file = "simulations/leaders-girvan-newman.rds"
+)
+
+
+saveRDS(
+  g_membership,
+  file = "simulations/leaders-membership-girvan-newman.rds"
 )

@@ -1,46 +1,33 @@
 library(igraph)
+library(magrittr)
 
-# Reading the data in
-leaders_ga <- readRDS("simulations/leaders-group-assignment.rds")
-leaders_kp <- readRDS("simulations/leaders-keyplayer.rds")
-leaders_id <- readRDS("simulations/leaders-indegree.rds")
-leaders_mm <- readRDS("simulations/leaders-mentor-match.rds")
-leaders_gn <- readRDS("simulations/leaders-girvan-newman.rds")
-leaders_rg <- readRDS("simulations/leaders-random-groups.rds")
+membership_gn <- readRDS("simulations/leaders-membership-girvan-newman.rds")
+membership_mm <- readRDS("simulations/leaders-membership-mentor-match.rds")
+membership_rg <- readRDS("simulations/leaders-membership-random-groups.rds")
 
 dat_attributes <- readRDS("simulations/dat_attributes.rds")
 dat_networks   <- readRDS("simulations/dat_networks.rds")
 dat_nleaders   <- readRDS("simulations/dat_nleaders.rds")
 
-# Preprocessing
-leaders_kp <- lapply(leaders_kp, function(y) lapply(y, function(x) {
-  
-  if (length(x) == 1 && is.na(x))
-    return(x)
-  
-  as.vector(x)
-
-  }))
-leaders_ga <- lapply(leaders_ga, function(y) lapply(y, function(x) {
-  
-  if (length(x) == 1 && is.na(x))
-    return(x)
-  
-  unique(x[-length(x)])
-  }))
-
 # Function to compute overlap of two sets
-jaccard <- function(a, b) {
+hamming_dist <- function(a, b) {
   
-  if (any(is.na(c(a, b))))
-    return(NA)
+  a <- as.matrix(dist(cbind(a)))
+  a[] <- as.integer(a == 0)
+  diag(a) <- 0
   
-  length(intersect(a, b)) / 
-    length(unique(c(a,b)))
+  b <- as.matrix(dist(cbind(b)))
+  b[] <- as.integer(b == 0)
+  diag(b) <- 0
+  
+  
+  n <- nrow(a)
+  
+  sum(abs(a - b))/(n*(n-1))
   
 }
 
-results <- ls(pattern = "leaders_[a-zA-Z0-9]+")
+results <- ls(pattern = "membership_[a-zA-Z0-9]+")
 combinations <- combn(results, 2, simplify = FALSE)
 
 for (g in combinations) {
@@ -53,7 +40,7 @@ for (g in combinations) {
     
     # Computing the jaccard index
     for (i in seq_along(ans[[n]]))
-      ans[[n]][[i]] <- jaccard(get(g[1])[[n]][[i]],get(g[2])[[n]][[i]])
+      ans[[n]][[i]] <- hamming_dist(get(g[1])[[n]][[i]],get(g[2])[[n]][[i]])
     
   }
   
@@ -61,12 +48,12 @@ for (g in combinations) {
   assign(
     paste0(
       "overlap_",
-      gsub("^leaders_", "", g[1]), "_",
-      gsub("^leaders_", "", g[2])
-      ),
+      gsub("^membership_", "", g[1]), "_",
+      gsub("^membership_", "", g[2])
+    ),
     ans,
     envir = .GlobalEnv
-    )
+  )
   
 }
 
@@ -89,5 +76,4 @@ rownames(J) <- gsub("RG", "Random Groups", rownames(J))
 rownames(J) <- gsub("GN", "Girvan-Newman", rownames(J))
 
 # Writing the output
-write.csv(J, "simulations/overlap.csv")
-
+write.csv(J, "simulations/group-overlap.csv")
