@@ -21,15 +21,17 @@ models <- list(
     ),
   thr2count = list(
     thr  = function(n) rep(2, n),
-    desc = "Exposure to 2 individuals",
+    desc = "Fix threshold of 2 alters",
     exposure.args = list(normalized=FALSE)
   ),
   thrUnif = list(
     thr  = function(n) runif(n),
-    desc = "Uniform threshold U(0,1).",
+    desc = "Uniform threshold U(0,1)",
     exposure.args = list()
   )
 )
+
+saveRDS(models, "simulations/diffnet-models.rds")
 
 # This function creates a named vector of type list
 namedvector <- function(x) structure(vector("list", length(x)), names=names(x))
@@ -62,7 +64,8 @@ for (m in names(models)) {
             threshold.dist = thr,
             t              = 10L,
             stop.no.diff   = FALSE,
-            exposure.args  = models[[m]]$exposure.args
+            exposure.args  = models[[m]]$exposure.args,
+            rewire         = FALSE
           )
         )
         

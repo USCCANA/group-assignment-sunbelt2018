@@ -2,6 +2,7 @@ library(netdiffuseR)
 library(magrittr)
 
 dat <- readRDS("simulations/diffnet.rds")
+models <- readRDS("simulations/diffnet-models.rds")
 
 # This function creates a named vector of type list
 namedvector <- function(x) structure(vector("list", length(x)), names=names(x))
@@ -52,7 +53,7 @@ for (m in names(dat)) {
       NA, xlim = c(0, 10), ylim = c(0,max(unlist(ans)) + .1),
       xlab = "Time", ylab = "Adoption",
       main = sprintf(
-        "Diffusion Threshold: %s\nNetwork type: %s", m, n
+        "%s\nNetwork type: %s", models[[m]]$desc, n
       )
     )
     
